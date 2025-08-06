@@ -235,6 +235,7 @@ def plot_floating_gender_age_ratio(trdar_cd):
 
 # 5. 점포 수 추이
 def plot_store_count_trend(trdar_cd, induty_cd):
+    
     df = df_store[(df_store["상권_코드"] == trdar_cd) & 
                   (df_store["서비스_업종_코드"] == induty_cd)].sort_values("기준_년분기_코드")
     if df.empty:
@@ -722,18 +723,27 @@ def analyze_commercial_area(trdar_cd):
     quarters = [20251, 20243, 20241, 20233, 20231, 20223]
 
     # 바 차트 함수
+
     def bar_plot(df, ycol, title, fname, color):
         df_sel = df[df["기준_년분기_코드"].isin(quarters)]
+        
+        # x축 값 (분기)
+        x = df_sel["기준_년분기_코드"].astype(str).tolist()
+        # y축 값 (해당 인구수 등)
+        y = df_sel[ycol].tolist()
+        
         plt.figure(figsize=(10, 4))
-        sns.barplot(data=df_sel, x="기준_년분기_코드", y=ycol, color=color)
+        plt.bar(x, y, color=color)
         plt.title(title)
         plt.xlabel("분기")
         plt.ylabel("인구 수")
         plt.grid(True, linestyle="--", alpha=0.3)
         plt.tight_layout()
+        
         path = make_img_path(fname)
         plt.savefig(path)
         plt.close()
+        
         return f"/static/img/{fname}.png"
 
     # 개별 시각화 생성
