@@ -712,12 +712,7 @@ def analyze_commercial_area(trdar_cd):
 
     # 상권 요약
     area_name = pop.iloc[-1]["상권_코드_명"]
-    latest_data = {
-        "상권명": area_name,
-        "총_상주인구": int(pop.iloc[-1]["총_상주인구_수"]),
-        "총_직장인구": int(wrk.iloc[-1]["총_직장_인구_수"]),
-        "총_유동인구": int(flow.iloc[-1]["총_유동인구_수"]),
-    }
+    
 
     # 추세 그래프에 사용할 분기
     quarters = [20251, 20243, 20241, 20233, 20231, 20223]
@@ -750,15 +745,19 @@ def analyze_commercial_area(trdar_cd):
     img_pop = bar_plot(pop, "총_상주인구_수", "총 상주인구 추세", f"pop_trend_{trdar_cd}", "gray")
     img_flow = bar_plot(flow, "총_유동인구_수", "총 유동인구 추세", f"flow_trend_{trdar_cd}", "lightcoral")
     img_wrk = bar_plot(wrk, "총_직장_인구_수", "총 직장인구 추세", f"wrk_trend_{trdar_cd}", "steelblue")
+    
 
     # 결과 반환
     return {
-        "상권요약": latest_data,
+        "상권명": area_name,
+        "총_상주인구": int(pop.iloc[-1]["총_상주인구_수"]),
+        "총_직장인구": int(wrk.iloc[-1]["총_직장_인구_수"]),
+        "총_유동인구": int(flow.iloc[-1]["총_유동인구_수"]),
         "상주인구_그래프": img_pop,
         "유동인구_그래프": img_flow,
         "직장인구_그래프": img_wrk,
     }
-    
+
 def analyze_floating_time(trdar_cd: int):
     try:
         flow = df_flow[df_flow["상권_코드"] == trdar_cd].sort_values("기준_년분기_코드").iloc[-1]
