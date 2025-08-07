@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Query
 from services import analysis_service as svc
+from services import score_service
+
 
 router = APIRouter()
 
@@ -58,3 +60,7 @@ def store_franchise(trdar_cd: int, induty_cd: str):
 @router.get("/area/summary")
 def area_summary(trdar_cd: int):
     return svc.analyze_commercial_area(trdar_cd)
+
+@router.get("/score")
+def get_commercial_score(trdar_cd: int, induty_cd: str):
+    return score_service.score_summary(trdar_cd, induty_cd)
